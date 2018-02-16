@@ -98,8 +98,7 @@ WHERE street = 'Morningside Edinburgh';
 -- BEGIN: 1.6
 SELECT * FROM Employee
 WHERE street = 'Morningside Edinburgh'
-AND
-salary > 2000;
+AND salary > 2000;
 
 -- BEGIN: 1.7
 SELECT * FROM Account
@@ -220,8 +219,8 @@ create type Employee under Person(
 create table employee_table of Employee;
 
 insert into employee_table values(NameType('Jostein', 'H', 'Dyrseth'), Phone('53808599289', '90264748141', '84042285297'), Address(Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male', 3672);
-insert into Person_Table values(NameType('Frode', null, 'Dyrseth'), Phone('28690014259', '56289249963', '71126010960'), Address(Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male', 8231);
-insert into Person_Table values(NameType('Britt', 'E', 'Haugland'), Phone('21895836859', '25191818995', '09526048173'), Address(Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female', 1665);
+insert into employee_table values(NameType('Frode', null, 'Dyrseth'), Phone('28690014259', '56289249963', '71126010960'), Address(Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male', 8231);
+insert into employee_table values(NameType('Britt', 'E', 'Haugland'), Phone('21895836859', '25191818995', '09526048173'), Address(Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female', 1665);
 -- END 2.11
 
 -- BEGIN 2.12:
@@ -276,7 +275,7 @@ create table employment_table (
   position ref job scope is job_table
 );
 /
-insert into employment table
+insert into employment_table table
 select ref(e), ref(j)
 from job_table j, employee_table e
 where e.emp_ID = 12
@@ -294,6 +293,46 @@ from job_table j, employee_table e
 where e.emp_ID = 14
 and j.job_ID = 3;
 -- END TASK 3.2
+
+-- START TASK 3.3:
+select * from employment_table;
+-- END TASK 3.3
+
+-- START TASK 3.4:
+-- END TASK 3.4
+
+-- START TASK 3.5:
+-- END TASK 3.5
+
+-- START TASK 3.6:
+-- END TASK 3.6
+
+-- START TASK 3.7:
+-- END TASK 3.7
+
+-- START TASK 3.8:
+-- END TASK 3.8
+
+-- START TASK 3.0:
+-- END TASK 3.9
+
+-- START TASK 3.10:
+-- END TASK 3.10
+
+-- START TASK 3.11:
+-- END TASK 3.11
+
+-- START TASK 3.12:
+-- END TASK 3.12
+
+-- START TASK 3.13:
+-- END TASK 3.13
+
+
+
+
+
+
 
 -- END OF PRACTICAL 3
 
