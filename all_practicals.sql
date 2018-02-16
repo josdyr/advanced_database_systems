@@ -83,29 +83,42 @@ INSERT INTO Customer_Account VALUES ('phWX7n0JpNOO','wkqveertwhgeilko');
 -- BEGIN: 1.2
 SELECT * FROM Customer
 WHERE firstname LIKE '%Jo%';
+-- END 1.2
 
 -- BEGIN: 1.3
 SELECT * FROM Customer
 WHERE salary > 2800;
+-- END 1.3
 
 -- BEGIN: 1.4
 SELECT * FROM Employee
 WHERE street = 'Morningside Edinburgh';
+-- END 1.4
 
 -- BEGIN: 1.5
 -- SKIPPED: Do not have attribute 'SupervisorID' implemented yet.
+-- END 1.5
 
 -- BEGIN: 1.6
 SELECT * FROM Employee
 WHERE street = 'Morningside Edinburgh'
 AND salary > 2000;
+-- END 1.6
 
--- BEGIN: 1.7
-SELECT * FROM Account
-WHERE open_date < TO_DATE('2016-01-09','YYYY-MM-DD');
+-- START 1.7
+-- END 1.7
 
 -- BEGIN: 1.8
+SELECT * FROM Account
+WHERE open_date < TO_DATE('2016-01-09','YYYY-MM-DD');
+-- END 1.8
+
+-- BEGIN: 1.9
 SELECT MAX(balance) FROM Account;
+-- BEGIN: 1.9
+
+-- BEGIN: 1.10
+-- BEGIN: 1.10
 
 -- END OF PRACTICAL 1:
 
@@ -211,21 +224,22 @@ WHERE p.p_name.first_name = 'Jostein';
 -- drop type Employee force;
 create type Employee under Person(
   emp_id int
-) not final;
+);
 -- END 2.10
 
 -- BEGIN 2.11:
--- drop table Emplayee_Table;
+-- drop table employee_table;
 create table employee_table of Employee;
 
 insert into employee_table values(NameType('Jostein', 'H', 'Dyrseth'), Phone('53808599289', '90264748141', '84042285297'), Address(Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male', 3672);
 insert into employee_table values(NameType('Frode', null, 'Dyrseth'), Phone('28690014259', '56289249963', '71126010960'), Address(Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male', 8231);
 insert into employee_table values(NameType('Britt', 'E', 'Haugland'), Phone('21895836859', '25191818995', '09526048173'), Address(Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female', 1665);
+SELECT * FROM employee_table;
 -- END 2.11
 
 -- BEGIN 2.12:
 -- drop type Job force;
-create type Job as object(
+create type JobType as object(
   jobtitle varchar2(20),
   job_id int,
   salary_amout int,
@@ -235,7 +249,7 @@ create type Job as object(
 
 -- BEGIN 2.13:
 -- drop table job_table force;
-create table job_table of Job;
+create table job_table of JobType;
 
 insert into job_table values('Software Engineer', 3672, 82814, 8);
 insert into job_table values('Mechanical Engineer', 3128, 55323, 5);
@@ -265,6 +279,7 @@ alter table employee_table add primary key (emp_ID);
 -- END NOTES
 
 -- BEGIN TASK 3.2:
+-- drop type employment;
 create type employment as object (
   employee_r ref employee,
   position ref job
