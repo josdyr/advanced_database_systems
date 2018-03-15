@@ -123,7 +123,7 @@
 ---- END OF PRACTICAL 1:
 
 
--- 🙂
+-------
 
 
 -- START OF PRACTICAL 2:
@@ -134,79 +134,90 @@ drop type jd_Street force;
 drop type jd_Address force;
 drop type jd_Phone force;
 drop type jd_Person force;
+drop table jd_Person_Table;
+drop type jd_Employee force;
+drop table jd_employee_table;
+drop type jd_JobType force;
+drop table jd_job_table;
+drop type jd_Employment force;
+drop table jd_employment_table;
 
-drop table jd_Person_Table force;
 -- End Drop
 
 -- BEGIN 1.2:
--- drop type NameType force;
+-- drop type jd_NameType force;
 create type jd_NameType as object(
   first_name varchar2(30),
   middle_name varchar2(30),
   last_name varchar2(30)
 );
-
--- drop type Street force;
+/
+-- drop type jd_Street force;
 create type jd_Street as object(
   street_number number,
   street_name varchar2(30)
 );
-
+/
 -- drop type Address force;
 create type jd_Address as object(
-  street_and_number Street,
+  street_and_number jd_Street,
   post_code varchar2(8),
   flat_number number,
   city varchar2(30),
   conuntry varchar2(30)
 );
-
+/
 -- drop type Phone force;
 create type jd_Phone as object(
   home varchar2(11),
   mobile varchar2(11),
   business varchar2(11)
 );
-
+/
 -- drop type Person force;
 create type jd_Person as object(
-  p_name NameType,
-  p_phone Phone,
-  p_address Address,
+  p_name jd_NameType,
+  p_phone jd_Phone,
+  p_address jd_Address,
   gender varchar2(6)
 ) not final;
-
+/
 -- drop table Person_Table;
 create table jd_Person_Table of jd_Person;
+/
 -- END 1.2
 
 -- BEGIN 2.2:
-insert into jd_Person_Table values(jd_NameType('Jostein', 'H', 'Dyrseth'), jd_Phone('53808599289', '90264748141', '84042285297'), jd_Address(Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male');
-insert into jd_Person_Table values(jd_NameType('Frode', null, 'Dyrseth'), jd_Phone('28690014259', '56289249963', '71126010960'), jd_Address(Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male');
-insert into jd_Person_Table values(jd_NameType('Britt', 'E', 'Haugland'), jd_Phone('21895836859', '25191818995', '09526048173'), jd_Address(Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female');
-insert into jd_Person_Table values(jd_NameType('Evy', 'E', 'Dyrseth'), jd_Phone('93081478672', '64104064080', '43540940170'), jd_Address(Street(39, 'Evy Veien'), '4489', 6, 'Vindafjord', 'Norway'), 'female');
-insert into jd_Person_Table values(jd_NameType('Asbjorn', 'H', 'Dyrseth'), jd_Phone('96017719078', '13869922648', '72511560363'), jd_Address(Street(39, 'Aurdalsveien'), '4489', 6, 'Vindafjord', 'Norway'), 'male');
+insert into jd_Person_Table values(jd_NameType('Jostein', 'H', 'Dyrseth'), jd_Phone('53808599289', '90264748141', '84042285297'), jd_Address(jd_Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male');
+insert into jd_Person_Table values(jd_NameType('Frode', null, 'Dyrseth'), jd_Phone('28690014259', '56289249963', '71126010960'), jd_Address(jd_Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male');
+insert into jd_Person_Table values(jd_NameType('Britt', 'E', 'Haugland'), jd_Phone('21895836859', '25191818995', '09526048173'), jd_Address(jd_Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female');
+insert into jd_Person_Table values(jd_NameType('Evy', 'E', 'Dyrseth'), jd_Phone('93081478672', '64104064080', '43540940170'), jd_Address(jd_Street(39, 'Evy Veien'), '4489', 6, 'Vindafjord', 'Norway'), 'female');
+insert into jd_Person_Table values(jd_NameType('Asbjorn', 'H', 'Dyrseth'), jd_Phone('96017719078', '13869922648', '72511560363'), jd_Address(jd_Street(39, 'Aurdalsveien'), '4489', 6, 'Vindafjord', 'Norway'), 'male');
+
+select * from jd_Person_Table;
+/
 -- END 2.2
 
 -- BEGIN 2.3:
 select p.p_name.last_name, p.p_address.street_and_number.street_number, p.p_address.street_and_number.street_name from jd_Person_Table p
 where p.p_name.first_name = 'Jostein'
 and p.p_name.last_name = 'Dyrseth';
+/
 -- END 2.3
 
 -- BEGIN 2.4:
-SELECT *
-FROM jd_Person_Table;
+select *
+from jd_person_table;
 /
-SELECT p_name
-FROM jd_Person_Table;
+select p_name
+from jd_person_table;
 /
-SELECT p.p_name.last_name
-FROM jd_Person_Table p;
+select p.p_name.last_name
+from jd_person_table p;
 /
-SELECT p.p_name.last_name
-FROM jd_Person_Table p
-WHERE p.p_name.first_name = 'Jostein';
+select p.p_name.last_name
+from jd_person_table p
+where p.p_name.first_name = 'Jostein';
 /
 -- END 2.4
 
@@ -235,16 +246,19 @@ WHERE p.p_name.first_name = 'Jostein';
 create type jd_Employee under jd_Person(
   emp_id int
 );
+/
 -- END 2.10
 
 -- BEGIN 2.11:
 -- drop table employee_table;
 create table jd_employee_table of jd_Employee;
+/
 
-insert into jd_employee_table values(jd_NameType('Jostein', 'H', 'Dyrseth'), jd_Phone('53808599289', '90264748141', '84042285297'), jd_Address(Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male', 3672);
-insert into jd_employee_table values(jd_NameType('Frode', null, 'Dyrseth'), jd_Phone('28690014259', '56289249963', '71126010960'), jd_Address(Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male', 8231);
-insert into jd_employee_table values(jd_NameType('Britt', 'E', 'Haugland'), jd_Phone('21895836859', '25191818995', '09526048173'), jd_Address(Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female', 1665);
-SELECT * FROM jd_employee_table;
+insert into jd_employee_table values(jd_NameType('Jostein', 'H', 'Dyrseth'), jd_Phone('53808599289', '90264748141', '84042285297'), jd_Address(jd_Street(39, 'Watson Cresent'), 'EH11 1ER', 6, 'Edinburgh', 'Scotland'), 'male', 3672);
+insert into jd_employee_table values(jd_NameType('Frode', null, 'Dyrseth'), jd_Phone('28690014259', '56289249963', '71126010960'), jd_Address(jd_Street(12, 'Aurdalsveien'), '5576', 5, 'Vats', 'Norway'), 'male', 8231);
+insert into jd_employee_table values(jd_NameType('Britt', 'E', 'Haugland'), jd_Phone('21895836859', '25191818995', '09526048173'), jd_Address(jd_Street(14, 'Melkeveien'), '5565', 10, 'Tysver', 'Norway'), 'female', 1665);
+select * from jd_employee_table;
+/
 -- END 2.11
 
 -- BEGIN 2.12:
@@ -255,11 +269,13 @@ create type jd_JobType as object(
   salary_amount int,
   years_of_experience int
 );
+/
 -- END 2.12
 
 -- BEGIN 2.13:
 -- drop table job_table force;
 create table jd_job_table of jd_JobType;
+/
 
 insert into jd_job_table values('Software Engineer', 4651, 82814, 8);
 insert into jd_job_table values('Mechanical Engineer', 8244, 55323, 5);
@@ -276,7 +292,7 @@ alter table jd_employee_table add primary key (emp_ID);
 -- END OF PRACTICAL 2
 
 
--- 🙂
+--------
 
 
 -- START OF PRACTICAL 3:
@@ -304,50 +320,60 @@ create table jd_employment_table (
 
 insert into jd_employment_table
 select ref(e), ref(j)
-from job_table j, employee_table e
+from jd_job_table j, jd_employee_table e
 where e.emp_ID = 3672
 and j.job_ID = 4651;
 /
-insert into employment_table
+insert into jd_employment_table
 select ref(e), ref(j)
-from job_table j, employee_table e
+from jd_job_table j, jd_employee_table e
 where e.emp_ID = 8231
 and j.job_ID = 8244;
 /
-insert into employment_table
+insert into jd_employment_table
 select ref(e), ref(j)
-from job_table j, employee_table e
+from jd_job_table j, jd_employee_table e
 where e.emp_ID = 1665
 and j.job_ID = 9365;
 -- END TASK 3.2
 
 -- START TASK 3.3:
-select * from employment_table; -- Q: how to select all attributes from employment_table ???
+select * from jd_employment_table; -- Q: how to select all attributes from employment_table ???
+/
 
-select * from employee_table;
-select * from job_table;
+select * from jd_employee_table;
+/
+select * from jd_job_table;
+/
 
-select deref(e.employee), deref(e.position) from employment_table e;
+select deref(e.employee), deref(e.position) from jd_employment_table e;
+/
 
-select value(e.employee), value(e.position) from employment_table e; -- Q: does not work. Why?
+ -- Q: does not work: Why?
+--select value(e.employee), value(e.position) from jd_employment_table e;
 
 select value(j)
-from job_table j
+from jd_job_table j
 where jobtitle = 'Mechanical Engineer';
+/
 -- END TASK 3.3
 
 -- START TASK 3.4:
-select e.employee.p_name from employment_table e where e.position.salary_amount > '60000';
-select e.position.jobtitle from employment_table e where e.employee.p_address.street_and_number.street_name = 'Aurdalsveien';
+select e.employee.p_name from jd_employment_table e where e.position.salary_amount > '60000';
+/
+select e.position.jobtitle from jd_employment_table e where e.employee.p_address.street_and_number.street_name = 'Aurdalsveien';
+/
 -- END TASK 3.4
 
 -- START TASK 3.5:
 --Easier to design object relational - objects map to real life situations
 --one problem can be multiplied through many subtypes if it is not identified, although fixing the problem can cascade down 
 --no normalisation needed for object relational
+
 -- END TASK 3.5
 
 -- START TASK 3.6:
+
 -- END TASK 3.6
 
 -- START TASK 3.7:
@@ -380,7 +406,7 @@ select e.position.jobtitle from employment_table e where e.employee.p_address.st
 -- END OF PRACTICAL 3
 
 
--- 🙂
+--------
 
 
 -- START OF PRACTICAL 4:
