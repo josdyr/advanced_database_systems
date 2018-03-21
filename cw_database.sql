@@ -68,10 +68,10 @@ create sequence seq_branch_id minvalue 900 start with 900 increment by 1 cache 1
 create table jd_Branch_Table of jd_BranchType;
 
 insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('33 Banking Street', 'Edinburgh', 'EH52 1BR'), jd_Phone('605512336', '200501952', '362008274'));
---insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('34 MoneyLand', 'Glasgow', 'EH12 1FF'), jd_Phone('598466542', '271075788', '718898143'));
---insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('145 Dollar St S', 'Manchester', 'M14 7LA'), jd_Phone('979489180', '957926665', '452269442'));
---insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('9 Cash Corner', 'Cairndow', 'PA26 8BL'), jd_Phone('852898633', '526498213', '845160644'));
---insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('3 Greedy Pl', 'Coldstream', 'TD12 4BF'), jd_Phone('226748586', '640583018', '420716567'));
+insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('34 MoneyLand', 'Glasgow', 'EH12 1FF'), jd_Phone('598466542', '271075788', '718898143'));
+insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('145 Dollar St S', 'Manchester', 'M14 7LA'), jd_Phone('979489180', '957926665', '452269442'));
+insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('9 Cash Corner', 'Cairndow', 'PA26 8BL'), jd_Phone('852898633', '526498213', '845160644'));
+insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('3 Greedy Pl', 'Coldstream', 'TD12 4BF'), jd_Phone('226748586', '640583018', '420716567'));
 --insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('3 Greedy Pl', 'Coldstream', 'TD12 4BF'), jd_Phone('226748586', '640583018', '420716567'));
 --insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('3 Greedy Pl', 'Coldstream', 'TD12 4BF'), jd_Phone('226748586', '640583018', '420716567'));
 --insert into jd_Branch_Table values (seq_branch_id.nextval, jd_Address('3 Greedy Pl', 'Coldstream', 'TD12 4BF'), jd_Phone('226748586', '640583018', '420716567'));
@@ -100,13 +100,15 @@ create type jd_EmployeeType as object(
 
 drop sequence seq_emp_id;
 create sequence seq_emp_id minvalue 100 start with 100 increment by 1 cache 10;
-create table jd_Employee_Table of jd_EmployeeType;
+create table jd_Employee_Table of jd_EmployeeType(
+    constraint job_position check (job.position in ('head', 'manager', 'project leader', 'accountant', 'cashier'))
+);
 
-insert into jd_Employee_Table values (seq_emp_id.nextval, '900', jd_Person(jd_NameType('Mr', 'Jostein', 'Dyrseth'), jd_Address('39 Watson Circ', 'Edinburgh', 'EH22 2BD'), jd_Phone('637189720', '329257287', '828613241'), 'SEB5JCKTP'), jd_JobType('Head', 15.7, '22-May-2012', null));
-insert into jd_Employee_Table values (seq_emp_id.nextval, '901', jd_Person(jd_NameType('Mrs', 'Sally', 'Silly'), jd_Address('2 Silly Road', 'Glasgow', 'RS33 2EF'), jd_Phone('844676677', '300341038', '378804980'), 'K9VXAL5B7'), jd_JobType('Cashier', 11.6, '04-Dec-2009', '100'));
-insert into jd_Employee_Table values (seq_emp_id.nextval, '902', jd_Person(jd_NameType('Mr', 'Freddy', 'Frank'), jd_Address('2 Circus Rd', 'Liverpool', 'RS33 2EF'), jd_Phone('026388971', '293152681', '109093387'), 'K9VXAL5B7'), jd_JobType('Manager', 13.4, '08-Jul-2007', '100'));
-insert into jd_Employee_Table values (seq_emp_id.nextval, '903', jd_Person(jd_NameType('Mr', 'Rylee', 'Pitt'), jd_Address('2 Central Parade', 'Harrow', 'HA1 2TW'), jd_Phone('418148905', '468212682', '605287140'), 'K9VXAL5B7'), jd_JobType('Project Leader', 15.9, '12-Dec-2016', '102'));
-insert into jd_Employee_Table values (seq_emp_id.nextval, '904', jd_Person(jd_NameType('Mrs', 'Joy', 'Gallegos'), jd_Address('Unnamed Road', 'Betchworth', 'RH3 7AR'), jd_Phone('481906256', '912798671', '275580867'), 'K9VXAL5B7'), jd_JobType('Accountant', 12.3, '14-Sep-2014', '102'));
+insert into jd_Employee_Table values (seq_emp_id.nextval, '900', jd_Person(jd_NameType('Mr', 'Jostein', 'Dyrseth'), jd_Address('39 Watson Circ', 'Edinburgh', 'EH22 2BD'), jd_Phone('637189720', '329257287', '828613241'), 'SEB5JCKTP'), jd_JobType('head', 15.7, '22-May-2012', null));
+insert into jd_Employee_Table values (seq_emp_id.nextval, '901', jd_Person(jd_NameType('Mrs', 'Sally', 'Silly'), jd_Address('2 Silly Road', 'Glasgow', 'RS33 2EF'), jd_Phone('844676677', '300341038', '378804980'), 'K9VXAL5B7'), jd_JobType('cashier', 11.6, '04-Dec-2009', '100'));
+insert into jd_Employee_Table values (seq_emp_id.nextval, '902', jd_Person(jd_NameType('Mr', 'Freddy', 'Frank'), jd_Address('2 Circus Rd', 'Liverpool', 'RS33 2EF'), jd_Phone('026388971', '293152681', '109093387'), 'K9VXAL5B7'), jd_JobType('manager', 13.4, '08-Jul-2007', '100'));
+insert into jd_Employee_Table values (seq_emp_id.nextval, '903', jd_Person(jd_NameType('Mr', 'Rylee', 'Pitt'), jd_Address('2 Central Parade', 'Harrow', 'HA1 2TW'), jd_Phone('418148905', '468212682', '605287140'), 'K9VXAL5B7'), jd_JobType('project leader', 15.9, '12-Dec-2016', '102'));
+insert into jd_Employee_Table values (seq_emp_id.nextval, '904', jd_Person(jd_NameType('Mrs', 'Joy', 'Gallegos'), jd_Address('Unnamed Road', 'Betchworth', 'RH3 7AR'), jd_Phone('481906256', '912798671', '275580867'), 'K9VXAL5B7'), jd_JobType('accountant', 12.3, '14-Sep-2014', '102'));
 --insert into jd_Employee_Table values (seq_emp_id.nextval, '901', jd_Person(jd_NameType('Mrs', 'Sally', 'Silly'), jd_Address('2 Silly Road', 'Edinburgh', 'RS33 2EF'), jd_Phone('844676677', '300341038', '378804980'), 'K9VXAL5B7'), jd_JobType('Cashier', 11.7, '04-Dec-2009', '6'));
 --insert into jd_Employee_Table values (seq_emp_id.nextval, '901', jd_Person(jd_NameType('Mrs', 'Sally', 'Silly'), jd_Address('2 Silly Road', 'Edinburgh', 'RS33 2EF'), jd_Phone('844676677', '300341038', '378804980'), 'K9VXAL5B7'), jd_JobType('Cashier', 11.7, '04-Dec-2009', '6'));
 --insert into jd_Employee_Table values (seq_emp_id.nextval, '901', jd_Person(jd_NameType('Mrs', 'Sally', 'Silly'), jd_Address('2 Silly Road', 'Edinburgh', 'RS33 2EF'), jd_Phone('844676677', '300341038', '378804980'), 'K9VXAL5B7'), jd_JobType('Cashier', 11.7, '04-Dec-2009', '6'));
@@ -166,7 +168,7 @@ create type jd_AccountType as object (
     interest_rate float,
     od_limit float,
     date_opened date,
-    account_type varchar2(30) -- add constraint
+    account_type varchar2(30)
 );
 /
 
@@ -180,8 +182,8 @@ create table jd_Account_Table of jd_AccountType(
 
 insert into jd_Account_Table values (seq_acc_id.nextval, (select ref(b) from jd_Branch_Table b where branch_id = '900'), 56.89, 2.5, 800, '24-Mar-2015', 'savings');
 insert into jd_Account_Table values (seq_acc_id.nextval, (select ref(b) from jd_Branch_Table b where branch_id = '900'), 80.97, 3.8, 1000, '12-Feb-2018', 'savings');
---insert into jd_Account_Table values (seq_acc_id.nextval, '900', 12.06, 2.2, 300, '13-Jan-2004', 'savings');
---insert into jd_Account_Table values (seq_acc_id.nextval, '900', 330.43, 1.9, 450, '04-Dec-2015', 'savings');
+insert into jd_Account_Table values (seq_acc_id.nextval, (select ref(b) from jd_Branch_Table b where branch_id = '900'), 12.06, 2.2, 300, '13-Jan-2004', 'savings');
+insert into jd_Account_Table values (seq_acc_id.nextval, (select ref(b) from jd_Branch_Table b where branch_id = '901'), 330.43, 1.9, 450, '04-Dec-2015', 'savings');
 --insert into jd_Account_Table values (seq_acc_id.nextval, '900', 150.05, 6.2, 800, '27-May-2014', 'current');
 --insert into jd_Account_Table values (seq_acc_id.nextval, '901', 241.89, 5.6, 1599, '22-Jun-2017', 'current');
 --insert into jd_Account_Table values (seq_acc_id.nextval, '901', 43.23, 6.8, 1000, '19-Mar-2016', 'savings');
@@ -237,14 +239,13 @@ where e.person.my_name.first_name like '%Jos%';
 -- Query b:
 
 
-select distinct a.ref_to_branch.branch_id,
-       count(a.account_type) from jd_Account_Table a
-where a.account_type = 'savings'
-group by a.account_id,a.ref_to_branch.branch_id;
+--select distinct a.ref_to_branch.branch_id,
+--count(a.account_type) from jd_Account_Table a
+--where a.account_type = 'savings'
+--group by a.account_id,a.ref_to_branch.branch_id;
 
 
-select a.ref_to_branch.branch_id,
-    a.account_type
-from jd_Account_Table a
-where a.account_type = 'savings';
+select b.branch_id, (select count(*) from jd_account_table a where a.)
+from jd_Branch_Table b
+group by branch_id;
 
