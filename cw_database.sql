@@ -163,12 +163,12 @@ insert into jd_Customer_Table values (seq_cust_id.nextval, jd_Person(jd_NameType
 -- drop type jd_AccountType force;
 create type jd_AccountType as object (
     account_id varchar2(30),
-    ref_to_branch REF jd_branchType,
+    ref_to_branch ref jd_branchType,
     balance float,
     interest_rate float,
     od_limit float,
     date_opened date,
-    account_type varchar2(30)
+    account varchar2(30)
 );
 /
 
@@ -176,7 +176,7 @@ drop sequence seq_acc_id;
 create sequence seq_acc_id minvalue 8000 start with 8000 increment by 1 cache 10;
 create table jd_Account_Table of jd_AccountType(
     constraint account_id_constraint unique (account_id),
-    constraint account_type_constraint check (account_type in ('current', 'savings'))
+    constraint account_constraint check (account in ('current', 'savings'))
 );
 /
 
@@ -205,17 +205,26 @@ insert into jd_Account_Table values (seq_acc_id.nextval, (select ref(b) from jd_
 
 create type jd_CustomerAccountType as object (
     cusomter ref jd_CustomerType,
-    account_type ref jd_AccountType
+    account ref jd_AccountType
 );
 /
 
 create table jd_CustomerAccount_Table(
     customer ref jd_CustomerType scope is jd_Customer_Table,
-    account_type ref jd_AccountType scope is jd_Account_Table
+    account ref jd_AccountType scope is jd_Account_Table
 );
 /
 
 -- populate the jd_CustomerAccount_Table:
+
+insert into CustomerAccount_Table values (
+  (select ref(c) from jd_Customer_Table c where c.customer_id = '1000')
+  ,(select ref(a) from jd_Account_Table a where a.account_id = '8000'))
+;
+/
+
+select * from jd_CustomerAccount_Table;
+
 insert into jd_CustomerAccount_Table values ((select ref(c) from jd_Customer_Table c where c.customer_id = '1000'), (select ref(a) from jd_Account_Table a where a.account_id = '8000'));
 insert into jd_CustomerAccount_Table values ((select ref(c) from jd_Customer_Table c where c.customer_id = '1001'), (select ref(a) from jd_Account_Table a where a.account_id = '8001'));
 insert into jd_CustomerAccount_Table values ((select ref(c) from jd_Customer_Table c where c.customer_id = '1002'), (select ref(a) from jd_Account_Table a where a.account_id = '8002'));
@@ -247,27 +256,29 @@ column first_name heading 'First|Name', format A10
 column last_name heading 'Last|Name', format A10
 
 select e.person.my_name.first_name as first_name,
-e.person.my_name.last_name as last_name
+       e.person.my_name.last_name as last_name
 from jd_Employee_Table e
-where e.person.my_name.first_name like '%Jos%';
+  where e.person.my_name.first_name like '%Jos%';
 
 -- Query b:
+column num_of_accounts heading 'Number of|Accounts', format A10
+column branch_id heading 'Branch|ID', format A6
 
-select count(*)
+select count(*) as num_of_accounts, branch_id
   from jd_Account_Table a, jd_Branch_Table b
   where a.ref_to_branch.branch_id = b.branch_id
-    and a.account_type = 'savings'
+    and a.account = 'savings'
   group by b.branch_id;
 
-select b.branch_id, (
-  select count(*)
-    from jd_Account_Table a, jd_Branch_Table b
-    where a.ref_to_branch.branch_id = b.branch_id
-      and a.account_type = 'savings'
-    group by b.branch_id
-  )
-from jd_Branch_Table b
-group by b.branch_id;
+--select b.branch_id, (
+--  select count(*)
+--    from jd_Account_Table a, jd_Branch_Table b
+--    where a.ref_to_branch.branch_id = b.branch_id
+--      and a.account = 'savings'
+--    group by b.branch_id
+--  )
+--from jd_Branch_Table b
+--group by b.branch_id;
 
 -- Query c:
 column full_name heading 'Full Name', format A20
@@ -278,8 +289,8 @@ with total_balance_per_customer (branch_id, customer_id, balance) as (
   select a.ref_to_branch.branch_id, c.customer.customer_id, sum(a.balance)
     from jd_CustomerAccount_Table c
       inner join jd_Account_Table a
-        on a.account_id = c.account_type.account_id
-    where a.account_type = 'savings'
+        on a.account_id = c.account.account_id
+    where a.account = 'savings'
     group by c.customer.customer_id, a.ref_to_branch
 )
 
